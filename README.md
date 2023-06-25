@@ -1,16 +1,10 @@
-# chat_gpt_int
+# Pocket ChatGPT
 
-A new Flutter project.
+This application acts as a pocketAI, which uses chatGPT 3.5 from openAI.
 
-## Getting Started
+- API used - https://api.openai.com
+- For API requests and response, http package is used.
+- For authentication and database, Firebase is used.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+User can send a message or ask anything to the application, which in turn creates a request to openAI and get a response.
+The user can save the chat if he/she wants to and view the search history later on.
