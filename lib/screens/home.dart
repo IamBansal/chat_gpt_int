@@ -1,11 +1,9 @@
 import 'dart:convert';
-
 import 'package:chat_gpt_int/constants.dart';
 import 'package:chat_gpt_int/screens/data_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
 import '../model/Response.dart';
 
 class HomePage extends StatefulWidget {
@@ -61,54 +59,82 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Pocket ChatGPT'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: _inputController,
-              decoration: const InputDecoration(
-                labelText: 'Enter some input',
+      body: SingleChildScrollView(
+        child:
+          Column(
+            children: [Container(
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
+              height: 130,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.black,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(7.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Send a message',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),),
+                    const SizedBox(height: 15,),
+                    TextFormField(
+                      controller: _inputController,
+                      decoration: const InputDecoration(
+                        hintText: 'Message',
+                        // border: InputBorder.none,
+                      ),
+                      maxLines: 1,
+                    ),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 16.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: makeChatRequest,
-                  child: const Text('Send Request'),
-                ),
-                const SizedBox(width: 16.0),
-                ElevatedButton(
-                  onPressed: () {
-                    saveInDB(_inputController.text, _response);
-                  },
-                  child: const Text('Save the chat'),
-                ),
-                const SizedBox(width: 16.0),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const DataScreen()));
-                  },
-                  child: const Text('History'),
-                )
-              ],
-            ),
-            const SizedBox(height: 16.0),
-            const Text(
-              'Response:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Text(_response),
-          ],
-        ),
-      ),
-    );
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: makeChatRequest,
+                child: const Text('Send Message'),
+              ),
+              const SizedBox(width: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  saveInDB(_inputController.text, _response);
+                },
+                child: const Text('Save the chat'),
+              ),
+              const SizedBox(width: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const DataScreen()));
+                },
+                child: const Text('History'),
+              ),
+            ]),
+          const SizedBox(height: 16.0),
+          const Text(
+            'Your Answer:',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 4.0),
+          Container(
+            margin: const EdgeInsets.all(10.0),
+            child: Text(_response,
+              style: const TextStyle(
+                  color: Colors.black
+              ),),
+          ),
+      ]),
+    ));
   }
 
   void saveInDB(String question, String answer) {
