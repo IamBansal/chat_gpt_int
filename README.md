@@ -1,4 +1,4 @@
-# chat_gpt_int
+# Pocket ChatGPT
 
 This application acts as a pocketAI, which uses chatGPT 3.5 from openAI.
 
