@@ -19,7 +19,7 @@ class _DataScreenState extends State<DataScreen> {
   }
 
   void fetchDataFromFirebase() {
-    // _database.child('your_database_node').once().then((DataSnapshot snapshot) {
+    // _database.child('chatgpt').once().then((DataSnapshot snapshot) {
     //   setState(() {
     //     dataList = List<String>.from(snapshot.value);
     //   });

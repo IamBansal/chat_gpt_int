@@ -26,6 +26,8 @@ class _AuthScreenEmailState extends State<AuthScreenEmail> {
         // User signed in successfully
         print('User signed in: ${user.uid}');
         Navigator.push(context, MaterialPageRoute(builder:(context) => const HomePage()));
+      } else {
+        print('User is null');
       }
     } catch (e) {
       // Error occurred during sign-in
@@ -45,6 +47,8 @@ class _AuthScreenEmailState extends State<AuthScreenEmail> {
         // User signed up successfully
         Navigator.push(context, MaterialPageRoute(builder:(context) => const HomePage()));
         print('User signed up: ${user.uid}');
+      } else {
+        print('User is null');
       }
     } catch (e) {
       // Error occurred during sign-up
@@ -81,13 +85,13 @@ class _AuthScreenEmailState extends State<AuthScreenEmail> {
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: (){
-                _signInWithEmailAndPassword;
+                _signInWithEmailAndPassword();
               },
                 child: const Text('Sign In'),
             ),
             ElevatedButton(
               onPressed: (){
-                _signUpWithEmailAndPassword;
+                _signUpWithEmailAndPassword();
               },
               child: const Text('Sign Up'),
             ),

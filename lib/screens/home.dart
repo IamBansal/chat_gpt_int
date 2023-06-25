@@ -1,7 +1,11 @@
 import 'dart:convert';
+
+import 'package:chat_gpt_int/constants.dart';
 import 'package:chat_gpt_int/screens/data_screen.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
 import '../model/Response.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,16 +20,17 @@ class _HomePageState extends State<HomePage> {
   String _response = '';
 
   Future<Response?> makeChatRequest() async {
-
     String input = _inputController.text;
     final url = Uri.parse('https://api.openai.com/v1/chat/completions');
     final headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer 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',
+      'Authorization': 'Bearer ${Constants().API_KEY}',
     };
     final body = jsonEncode({
       "model": "gpt-3.5-turbo",
-      "messages": [{"role": "user", "content": input}]
+      "messages": [
+        {"role": "user", "content": input}
+      ]
     });
 
     try {
@@ -37,8 +42,7 @@ class _HomePageState extends State<HomePage> {
           _response = result.choices[0].message.content;
         });
         return result;
-      } else {
-      }
+      } else {}
     } catch (e) {
       _response = 'Error occurred: $e';
     }
@@ -78,14 +82,19 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(width: 16.0),
                 ElevatedButton(
-                  onPressed: saveInDB,
+                  onPressed: () {
+                    saveInDB(_inputController.text, _response);
+                  },
                   child: const Text('Save the chat'),
                 ),
                 const SizedBox(width: 16.0),
                 ElevatedButton(
-                  onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder:(context) => const DataScreen()));
-                    },
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const DataScreen()));
+                  },
                   child: const Text('History'),
                 )
               ],
@@ -102,7 +111,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void saveInDB(){
-    //TODO - Implement to save data in firebase
+  void saveInDB(String question, String answer) {
+    final DatabaseReference _database =
+        FirebaseDatabase.instance.reference().child("chatgpt");
+
+    _database
+        .push()
+        .set({'question': question, 'answer': _response}).then((value) {
+      print('Data Added successfully.');
+    }).catchError((onError) {
+      print("Error occurred $onError");
+    });
   }
 }
