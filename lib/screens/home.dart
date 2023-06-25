@@ -16,6 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController _inputController = TextEditingController();
   String _response = '';
+  bool isLoading = false;
 
   Future<Response?> makeChatRequest() async {
     String input = _inputController.text;
@@ -32,6 +33,9 @@ class _HomePageState extends State<HomePage> {
     });
 
     try {
+      setState(() {
+        isLoading = true;
+      });
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -43,6 +47,11 @@ class _HomePageState extends State<HomePage> {
       } else {}
     } catch (e) {
       _response = 'Error occurred: $e';
+    }finally{
+      setState(() {
+        isLoading = false;
+      });
+
     }
     return null;
   }
@@ -127,12 +136,16 @@ class _HomePageState extends State<HomePage> {
           ),
           const SizedBox(height: 4.0),
           Container(
-            margin: const EdgeInsets.all(10.0),
-            child: Text(_response,
-              style: const TextStyle(
+              child: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              :Container(
+                margin: const EdgeInsets.all(10.0),
+                child: Text(_response,
+                  style: const TextStyle(
                   color: Colors.black
               ),),
           ),
+        )
       ]),
     ));
   }
@@ -144,9 +157,31 @@ class _HomePageState extends State<HomePage> {
     _database
         .push()
         .set({'question': question, 'answer': _response}).then((value) {
+          showPopup(context);
       print('Data Added successfully.');
     }).catchError((onError) {
       print("Error occurred $onError");
     });
   }
+
+  void showPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Chat Saved'),
+          content: const Text('Chat saved successfully to the database.'),
+          actions: [
+            ElevatedButton(
+              child: const Text('Okay'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }
