@@ -1,3 +1,4 @@
+import 'package:chat_gpt_int/model/Stored.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class DataScreen extends StatefulWidget {
 
 class _DataScreenState extends State<DataScreen> {
   final DatabaseReference _database = FirebaseDatabase.instance.reference();
-  List<String> dataList = [];
+  List<Stored> dataList = [];
 
   @override
   void initState() {
@@ -21,9 +22,11 @@ class _DataScreenState extends State<DataScreen> {
   void fetchDataFromFirebase() {
     // _database.child('chatgpt').once().then((DataSnapshot snapshot) {
     //   setState(() {
-    //     dataList = List<String>.from(snapshot.value);
+    //     dataList
+    //     dataList = List<Stored>.from(snapshot.value);
     //   });
-    // }).catchError((error) {
+    // })
+    // .catchError((error) {
     //   print('Error fetching data: $error');
     // });
   }
@@ -38,7 +41,8 @@ class _DataScreenState extends State<DataScreen> {
         itemCount: dataList.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(dataList[index]),
+            title: Text(dataList[index].question),
+            subtitle: Text(dataList[index].answer),
           );
         },
       ),
