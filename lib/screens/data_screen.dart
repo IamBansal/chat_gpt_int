@@ -16,18 +16,6 @@ class _DataScreenState extends State<DataScreen> {
   @override
   void initState() {
     super.initState();
-    fetchDataFromFirebase();
-  }
-
-  void fetchDataFromFirebase() {
-    // _database.child('chatgpt').once().then((DataSnapshot snapshot) {
-    //   setState(() {
-    //     dataList = List<Stored>.from(snapshot.value);
-    //   });
-    // })
-    // .catchError((error) {
-    //   print('Error fetching data: $error');
-    // });
   }
 
   @override
